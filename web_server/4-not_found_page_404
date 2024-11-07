@@ -1,4 +1,5 @@
- the current state of the server
+#!/usr/bin/env bash
+#Updates the current state of the server
 #Installs Nginx on the server
 #Changes the user and user group ownership for editing file
 #overwrites the default page of nginx
@@ -18,7 +19,7 @@ echo "server {
 	index index.html index.htm 404.html index.nginx-debian.html;
 	server_name _;
 	location /redirect_me {
-		return 301 https://www.youtube.com/watch?v=-VGIt10m9VQ;
+		return 301 https://www.youtube.com/watch?v=7qZl_5xHoBw&t=1358s&ab_channel=PowerfulJRE;
 	}
 	location /xyz {
 		return 404;
