@@ -1,22 +1,20 @@
 #!/usr/bin/env bash
-# Install necessary dependencies
-apt-get update
-apt-get -y install software-properties-common
+# bash script that installs HAProxy & makes configurations to meet the following requirements:
+sudo apt update
+sudo apt install -y haproxy
 
-# Add HAProxy repository and install it
-add-apt-repository ppa:vbernat/haproxy-1.8 -y
-apt-get update
-apt-get -y install haproxy
+# Enable HAProxy service
+sudo systemctl enable haproxy
 
-# Enable HAProxy on startup
-echo "ENABLED=1" | sudo tee -a /etc/default/haproxy
-
-# Configure HAProxy with your web servers
-cat <<EOF | sudo tee /etc/haproxy/haproxy.cfg
-# HAProxy configuration to balance traffic between two web servers
+# Configure HAProxy
+cat <<EOL | sudo tee /etc/haproxy/haproxy.cfg > /dev/null
+# Global settings
 global
-    log 127.0.0.1 local0
+    log /dev/log    local0
+    log /dev/log    local1 notice
+    maxconn 200
 
+# Default settings
 defaults
     log     global
     option  httplog
@@ -24,16 +22,21 @@ defaults
     timeout client  50000ms
     timeout server  50000ms
 
+# Frontend (client-side) configuration
 frontend http_front
     bind *:80
     default_backend http_back
 
+# Backend (server-side) configuration
 backend http_back
     balance roundrobin
-    server 6325-web-01 35.172.186.17:80 check
-    server 6325-web-02 3.80.87.226:80 check
-EOF
+    server web-01 35.172.186.17:80 check
+    server web-02 3.80.87.226:80 check
+EOL
 
-# Restart HAProxy to apply the new configuration
-sudo service haproxy restart
+# Restart HAProxy to apply the configuration
+sudo systemctl restart haproxy
+
+# Output the status
+echo "HAProxy is installed and configured, load balancing between web-01 and web-02."
 
