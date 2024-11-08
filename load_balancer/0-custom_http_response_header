@@ -1,4 +1,4 @@
-#!/bin/bash
+ #!/usr/bin/env bash
 # Function to set up Nginx
 
 setup_nginx() {
