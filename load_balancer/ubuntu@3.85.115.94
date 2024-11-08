@@ -1,19 +1,16 @@
 #!/usr/bin/env bash
-#update and installs haproxy
-
-sudo apt-get -y update 
-sudo apt-get -y install haproxy
-sudo chown $USER:USER /etc/haproxy/haproxy.cfg
-
-echo "
-frontend buydloading.tech
-	bind *:80
-	mode https
-	default_backend 
-
-backend app
-   balance roundrobin
-   server 6325-web-01 35.172.186.17:80 check
-   server 6325-web-02 3.80.87.226:80 check" >> /etc/haproxy/haprxy.cfg
-
-sudo service haproxy restart
+# bash script that installs HAProxy & makes configurations to meet the following requirements:
+apt-get -y install software-properties-common
+add-apt-repository ppa:vbernat/haproxy-1.8
+apt-get update
+apt-get -y install haproxy
+echo "ENABLED=1" >> /etc/default/haproxy
+printf %s "listen 6325-web
+    bind *:80
+        mode http
+            balance roundrobin
+                server 6325-web-01 35.172.186.17:80 check
+                    server 6325-web-01 3.80.87.226:80 check
+                    " >> /etc/haproxy/haproxy.cfg
+                    sudo service haproxy restart
+~                                                    
