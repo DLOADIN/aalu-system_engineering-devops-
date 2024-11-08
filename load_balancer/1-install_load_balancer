@@ -3,7 +3,7 @@
 sudo apt update
 sudo apt install -y haproxy
 
-# Enable HAProxy service
+# Enable HAProxy to start on boot
 sudo systemctl enable haproxy
 
 # Configure HAProxy
@@ -34,9 +34,14 @@ backend http_back
     server web-02 3.80.87.226:80 check
 EOL
 
-# Restart HAProxy to apply the configuration
+# Restart HAProxy to apply changes
 sudo systemctl restart haproxy
 
-# Output the status
-echo "HAProxy is installed and configured, load balancing between web-01 and web-02."
+# Test the load balancer
+echo "Testing HAProxy load balancing between web-01 and web-02"
+curl -sI http://3.85.115.94 | grep X-Served-By
+curl -sI http://3.85.115.94 | grep X-Served-By
+
+# Output the final confirmation
+echo "HAProxy has been configured and tested. Load balancing should alternate between web-01 and web-02."
 
