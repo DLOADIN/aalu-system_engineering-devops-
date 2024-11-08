@@ -1,31 +1,27 @@
 #!/usr/bin/env bash
 # Function to set up Nginx
-
 setup_nginx() {
     # Update the package list and install Nginx
     sudo apt update -y
     sudo apt install nginx -y
-    
-    # Set the hostname to match the server name (e.g., student_id-web-01)
-    # Assumes the hostname is already correctly set in the server name
+
+    # Get the current hostname of the server
     hostname=$(hostname)
-    
-    # Configure Nginx to add the X-Served-By header with the hostname value
-    echo "
-    server {
+
+    # Create a new Nginx configuration with a custom header
+    echo "server {
         listen 80;
-        
+
         # Custom header with the server's hostname
-        add_header X-Served-By \"$hostname\";
+        add_header X-Served-By \"$hostname\" always;
 
         location / {
             root /var/www/html;
             index index.html;
         }
-    }
-    " | sudo tee /etc/nginx/sites-available/default > /dev/null
+    }" | sudo tee /etc/nginx/sites-available/default > /dev/null
 
-    # Restart Nginx to apply changes
+    # Restart Nginx to apply the changes
     sudo systemctl restart nginx
 }
 
