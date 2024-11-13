@@ -56,6 +56,3 @@ These directories contain scripts and resources for debugging issues within the 
 If you would like to contribute to this repository, please submit a pull request with a detailed description of your changes. Ensure that your code follows the best practices for system engineering and DevOps.
 
 ---
-
-### License
-This project is open-source and available under the MIT License.
